@@ -36,13 +36,7 @@ class Fetch {
 
   _request(url, ...options) {
     const request = this._creatRequest(url, ...options);
-    return fetch(request.url, request.options).then(res => res.json()).then(json => {
-      if (json.code === '401') {
-        window.location.href = `${ATFCAPI.HOME}?from=${window.location.href}`;
-      } else {
-        return json;
-      }
-    });
+    return fetch(request.url, request.options).then(res => res.json());
   }
 
   fetch(url, options) {
