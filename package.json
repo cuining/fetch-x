@@ -4,7 +4,7 @@
   "description": "A wrapper around the new fetch API",
   "main": "index.js",
   "scripts": {
-    "test": "test"
+    "test": "node test"
   },
   "dependencies": {
     "isomorphic-fetch": "^2.2.1"
