@@ -1,4 +1,5 @@
 # fetch-x
+[![Build Status](https://travis-ci.org/cuining/fetch-x.svg?branch=master)](https://travis-ci.org/cuining/fetch-x)
 
 A wrapper around the new fetch API
 
@@ -40,4 +41,3 @@ A wrapper around the new fetch API
     fetchX.put(url[, data[, options]])
 
     fetchX.patch(url[, data[, options]])  
-    
