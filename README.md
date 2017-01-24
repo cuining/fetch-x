@@ -26,6 +26,7 @@ A wrapper around the new fetch API
 
 #Methods
 > the default `credentials` option is `include`)    
+
     fetchX.fetch(url[, options]
 
     fetchX.get(url[, data[, options]])
