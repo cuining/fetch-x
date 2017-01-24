@@ -1,0 +1,26 @@
+{
+  "name": "fetch-x",
+  "version": "0.1.0",
+  "description": "an simple fetch encapsulation",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "dependencies": {
+    "isomorphic-fetch": "^2.2.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cuining/fetch-x.git"
+  },
+  "keywords": [
+    "fetch",
+    "api"
+  ],
+  "author": "cuining",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/cuining/fetch-x/issues"
+  },
+  "homepage": "https://github.com/cuining/fetch-x#readme"
+}
