@@ -40,3 +40,4 @@ A wrapper around the new fetch API
     fetchX.put(url[, data[, options]])
 
     fetchX.patch(url[, data[, options]])  
+    
