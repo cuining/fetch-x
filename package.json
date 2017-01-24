@@ -1,7 +1,7 @@
 {
   "name": "fetch-x",
   "version": "0.1.0",
-  "description": "an simple fetch encapsulation",
+  "description": "A wrapper around the new fetch API",
   "main": "index.js",
   "scripts": {
     "test": "test"
