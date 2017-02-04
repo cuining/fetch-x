@@ -1,7 +1,10 @@
 /*global fetch*/
 "use strict";
 
+require('es6-promise').polyfill();
 var fetchX = require('./index');
+var expect = require('chai').expect;
+var nock = require('nock');
 var good = 'hello world. 你好世界。';
 var bad = 'good bye cruel world. 再见残酷的世界。';
 
@@ -22,11 +25,12 @@ describe('fetch', function() {
 	});
 
 	it('should be defined', function() {
-		expect(fetch).to.be.a('function');
+		const methods = ['head', 'put', 'get', 'post', 'delete', 'patch', 'fetch'];
+		methods.forEach(method => expect(fetchX[method]).to.be.a('function'));
 	});
 
 	it('should facilitate the making of requests', function(done) {
-		fetchX.fetch('//mattandre.ws/succeed.txt')
+		fetch('//mattandre.ws/succeed.txt')
 			.then(responseToText)
 			.then(function(data) {
 				expect(data).to.equal(good);
@@ -36,7 +40,7 @@ describe('fetch', function() {
 	});
 
 	it('should do the right thing with bad requests', function(done) {
-		fetchX.fetch('//mattandre.ws/fail.txt')
+		fetch('//mattandre.ws/fail.txt')
 			.then(responseToText)
 			.catch(function(err) {
 				expect(err.toString()).to.equal("Error: Bad server response");
@@ -44,5 +48,4 @@ describe('fetch', function() {
 			})
 			.catch(done);
 	});
-
 });

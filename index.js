@@ -13,9 +13,8 @@ class Fetch {
     options.headers = options.headers || {
       'Content-Type': 'application/x-www-form-urlencoded',
     };
-    if (options.body instanceof FormData || data instanceof FormData) {
-      delete options.headers;
-    }
+    
+
     options.credentials = 'include';
 
     if (data) {
