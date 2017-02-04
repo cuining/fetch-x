@@ -1,6 +1,3 @@
-/*global fetch*/
-"use strict";
-
 require('es6-promise').polyfill();
 var fetchX = require('./index');
 var expect = require('chai').expect;
