@@ -22,7 +22,7 @@ describe('fetch', function() {
 	});
 
 	it('should be defined', function() {
-		const methods = ['head', 'put', 'get', 'post', 'delete', 'patch', 'fetch'];
+		const methods = ['head', 'put', 'get', 'post', 'delete', 'patch', 'fetch', 'create'];
 		methods.forEach(method => expect(fetchX[method]).to.be.a('function'));
 	});
 

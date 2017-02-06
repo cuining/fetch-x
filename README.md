@@ -41,3 +41,17 @@ A wrapper around the new fetch API
     fetchX.put(url[, data[, options]])
 
     fetchX.patch(url[, data[, options]])  
+
+    fetchX.create([options])
+
+    let myfetch = fetchX.create({
+      headers: {
+        'Authorization': 'Bearer ' + getAPIToken(),
+        'X-My-Custom-Header': 'CustomHeader'
+      }
+    });
+
+    myfetch.get(url)
+    .then(res => res.json())
+    .then(json => console.log(json))
+    .catch(error => console.error(error));
