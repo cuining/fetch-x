@@ -3,31 +3,35 @@
 
 A wrapper around the new fetch API
 
-# Install
-    $ npm install fetch-x
-# Usage
-    import fetchX from 'fetch-x';
-
+## Install
+```
+$ npm install fetch-x
+```
+## Usage
+```javascript
+import fetchX from 'fetch-x';
+```
 `GET` request
-
-    fetchX.get('/xxx?query=12345')
-    .then(json => console.log(json))
-    .catch(error => console.error(error));
-
+```javascript
+fetchX.get('/xxx?query=12345')
+.then(json => console.log(json))
+.catch(error => console.error(error));
+```
 `POST` request
 > the default `Content-Type` is `application/x-www-form-urlencoded`
+```javascript
+fetchX.post('/xxx', {
+  param1: 'jack',
+  param2: 'pony'
+})
+.then(json => console.log(json))
+.catch(error => console.error(error));
+```
 
-    fetchX.post('/xxx', {
-      param1: 'jack',
-      param2: 'pony'
-    })
-    .then(json => console.log(json))
-    .catch(error => console.error(error));
+## Methods
+> the default `credentials` option is `include`)  
 
-
-#Methods
-> the default `credentials` option is `include`)    
-
+```javascript
     fetchX.fetch(url[, options]
 
     fetchX.get(url[, data[, options]])
@@ -44,7 +48,7 @@ A wrapper around the new fetch API
 
     fetchX.create([options])
 
-    let myfetch = fetchX.create({
+    const myfetch = fetchX.create({
       headers: {
         'Authorization': 'Bearer ' + getAPIToken(),
         'X-My-Custom-Header': 'CustomHeader'
@@ -55,3 +59,4 @@ A wrapper around the new fetch API
     .then(res => res.json())
     .then(json => console.log(json))
     .catch(error => console.error(error));
+    ```
