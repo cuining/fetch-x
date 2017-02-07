@@ -32,31 +32,47 @@ fetchX.post('/xxx', {
 > the default `credentials` option is `include`)  
 
 ```javascript
-    fetchX.fetch(url[, options]
+fetchX.fetch(url[, options]
 
-    fetchX.get(url[, data[, options]])
+fetchX.get(url[, data[, options]])
 
-    fetchX.delete(url[, options])
+fetchX.delete(url[, options])
 
-    fetchX.head(url[, options])
+fetchX.head(url[, options])
 
-    fetchX.post(url[, data[, options]])
+fetchX.post(url[, data[, options]])
 
-    fetchX.put(url[, data[, options]])
+fetchX.put(url[, data[, options]])
 
-    fetchX.patch(url[, data[, options]])  
+fetchX.patch(url[, data[, options]])  
 
-    fetchX.create([options])
+fetchX.create([options])
 
-    const myfetch = fetchX.create({
-      headers: {
-        'Authorization': 'Bearer ' + getAPIToken(),
-        'X-My-Custom-Header': 'CustomHeader'
-      }
-    });
+const myfetch = fetchX.create({
+  headers: {
+    'Authorization': 'Bearer ' + getAPIToken(),
+    'X-My-Custom-Header': 'CustomHeader'
+  }
+});
 
-    myfetch.get(url)
-    .then(res => res.json())
-    .then(json => console.log(json))
-    .catch(error => console.error(error));
-    ```
+myfetch.get(url)
+.then(res => res.json())
+.then(json => console.log(json))
+.catch(error => console.error(error));
+  ```
+
+## Middleware
+> add middleware to intercept response
+
+```javascript
+fetchX.applyMiddleware(json => {
+  if (json.code === 'xxx') {
+    // do something...
+  } else if (...) {
+    // do something...
+  } else {
+    // do something...
+    return json;
+  }
+})
+```
