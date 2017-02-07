@@ -1,9 +1,12 @@
 const querystring = require('querystring'); // node api https://nodejs.org/dist/latest-v6.x/docs/api/querystring.html
 const fetch = require('isomorphic-fetch');
 
+const isFormData = o => toString.call(o) === '[object FormData]';
+
 class Fetch {
   constructor(config = {}) {
     this.config = config;
+    this.middlewares = [];
   }
 
   _creatRequest(url, options = {}, method, data) {
@@ -13,12 +16,15 @@ class Fetch {
     options.headers = options.headers || {
       'Content-Type': 'application/x-www-form-urlencoded',
     };
-    
+
+    if (isFormData(options.body)) {
+      delete options.headers;
+    }
 
     options.credentials = 'include';
 
     if (data) {
-      if (typeof data === 'string') {
+      if (typeof data === 'string' || isFormData(data)) {
         options.body = data;
       } else {
         try {
@@ -35,7 +41,16 @@ class Fetch {
 
   _request(url, ...options) {
     const request = this._creatRequest(url, ...options);
-    return fetch(request.url, request.options).then(res => res.json());
+    let chain = [res => res.json(), ...this.middlewares];
+    let promise = fetch(request.url, request.options);
+    while (!!chain.length) {
+      promise = promise.then(chain.shift());
+    }
+    return promise;
+  }
+
+  applyMiddleware(...middlewares) {
+    this.middlewares.push(...middlewares);
   }
 
   fetch(url, options) {
@@ -73,6 +88,10 @@ class Fetch {
 class FetchFactory {
   constructor() {
     this.instance = new Fetch();
+  }
+
+  applyMiddleware(...middlewares) {
+    this.instance.applyMiddleware(...middlewares);
   }
 
   create(config) {
