@@ -41,16 +41,24 @@ class Fetch {
 
   _request(url, ...options) {
     const request = this._creatRequest(url, ...options);
-    let chain = [res => res.json(), ...this.middlewares];
-    let promise = fetch(request.url, request.options);
+    let chain = [() => fetch(request.url, request.options)];
+    let promise = Promise.resolve(request);
+    if (this.middlewares.request) {
+      chain.unshift(...this.middlewares.request);
+    }
+
+    if (this.middlewares.response) {
+      chain.push(...this.middlewares.response);
+    }
+
     while (!!chain.length) {
       promise = promise.then(chain.shift());
     }
     return promise;
   }
 
-  applyMiddleware(...middlewares) {
-    this.middlewares.push(...middlewares);
+  applyMiddleware(middlewares) {
+    this.middlewares = middlewares;
   }
 
   fetch(url, options) {
@@ -90,8 +98,8 @@ class FetchFactory {
     this.instance = new Fetch();
   }
 
-  applyMiddleware(...middlewares) {
-    this.instance.applyMiddleware(...middlewares);
+  applyMiddleware(middlewares) {
+    this.instance.applyMiddleware(middlewares);
   }
 
   create(config) {
@@ -125,7 +133,6 @@ class FetchFactory {
   head(...args) {
     return this.instance.head(...args);
   }
-
 }
 
 module.exports = new FetchFactory();
