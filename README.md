@@ -65,14 +65,20 @@ myfetch.get(url)
 > add middleware to intercept response
 
 ```javascript
-fetchX.applyMiddleware(json => {
-  if (json.code === 'xxx') {
-    // do something...
-  } else if (...) {
-    // do something...
-  } else {
-    // do something...
-    return json;
-  }
+fetchX.applyMiddleware({
+  response: [res => res.json(), json => {
+    if (json.code === 'xxx') {
+      // do something...
+    } else if (...) {
+      // do something...
+    } else {
+      // do something...
+      return json;
+    }
+  }],
+  request: [request => {
+    request.url = xxx + request.url;
+    return request;
+  }]
 })
 ```

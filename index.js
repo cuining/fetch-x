@@ -44,11 +44,11 @@ class Fetch {
     let chain = [() => fetch(request.url, request.options)];
     let promise = Promise.resolve(request);
     if (this.middlewares.request) {
-      chain.unshift(...this.middlewares.request);
+      chain.unshift(...[].concat(his.middlewares.request));
     }
 
     if (this.middlewares.response) {
-      chain.push(...this.middlewares.response);
+      chain.push(...[].concat(this.middlewares.response));
     }
 
     while (!!chain.length) {
