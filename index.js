@@ -1,7 +1,9 @@
 const querystring = require('querystring'); // node api https://nodejs.org/dist/latest-v6.x/docs/api/querystring.html
 const fetch = require('isomorphic-fetch');
 
-const isFormData = o => toString.call(o) === '[object FormData]';
+function isFormData(o) {
+  return toString.call(o) === '[object FormData]'
+}
 
 class Fetch {
   constructor(config = {}) {
@@ -41,7 +43,7 @@ class Fetch {
 
   _request(url, ...options) {
     const request = this._creatRequest(url, ...options);
-    let chain = [() => fetch(request.url, request.options)];
+    let chain = [function(){ fetch(request.url, request.options) }];
     let promise = Promise.resolve(request);
     if (this.middlewares.request) {
       chain.unshift(...[].concat(his.middlewares.request));
