@@ -46,7 +46,7 @@ class Fetch {
     let chain = [function(){ fetch(request.url, request.options) }];
     let promise = Promise.resolve(request);
     if (this.middlewares.request) {
-      chain.unshift(...[].concat(his.middlewares.request));
+      chain.unshift(...[].concat(this.middlewares.request));
     }
 
     if (this.middlewares.response) {
