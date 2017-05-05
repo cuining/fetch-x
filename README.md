@@ -76,9 +76,9 @@ fetchX.applyMiddleware({
       return json;
     }
   }],
-  request: [request => {
+  request: request => {
     request.url = xxx + request.url;
     return request;
-  }]
+  }
 })
 ```
