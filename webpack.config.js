@@ -7,7 +7,7 @@ module.exports = {
     path: path.join(__dirname, 'dist'),
     filename: 'index.js',
     library: 'fetchX',
-    libraryTarget: 'umd'
+    libraryTarget: 'commonjs'
   },
   module: {
     loaders: [{
