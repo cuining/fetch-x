@@ -1,138 +1,124 @@
-import querystring from 'querystring'; // node api https://nodejs.org/dist/latest-v6.x/docs/api/querystring.html
-import fetch from 'isomorphic-fetch';
 
-const isFormData = o => toString.call(o) === '[object FormData]';
+const isFormData = o => toString.call(o) === '[object FormData]'
+
+const encode = (val) => {
+  return encodeURIComponent(val).
+    replace(/%40/gi, '@').
+    replace(/%3A/gi, ':').
+    replace(/%24/g, '$').
+    replace(/%2C/gi, ',').
+    replace(/%20/g, '+').
+    replace(/%5B/gi, '[').
+    replace(/%5D/gi, ']')
+}
+
+const buildUrl = (url, params) => {
+  if (!params) return url
+  const query = []
+  const delimiter = '&'
+  for (let key in params) {
+    if (params.hasOwnProperty(key)) {
+      let value = encode(JSON.stringify(key))
+      query.push(`${encode(key)}=${value}`)
+    }
+  }
+
+  if (query.length) {
+    url += (url.includes('?') ? delimiter : '?') + query.join(delimiter)
+  }
+
+  return url
+}
 
 class Fetch {
   constructor(config = {}) {
-    this.config = config;
-    this.middlewares = [];
+    this.config = config
+    this.middlewares = []
   }
 
-  _creatRequest(url, options = {}, method, data) {
-    options = Object.assign({}, this.config, options);
-    const defaultMethod = !data && !options.body ? 'GET' : 'POST';
-    options.method = method || options.method || defaultMethod;
-    options.headers = options.headers || {
-      'Content-Type': 'application/x-www-form-urlencoded',
-    };
+  genOptions = (options = {}, method, data) => {
+    options = { ...this.config, ...options }
 
-    if (isFormData(options.body)) {
-      delete options.headers;
+    const defaultMethod = !data && !options.body ? 'GET' : 'POST'
+    options.method = method || options.method || defaultMethod
+    options.headers = options.headers || {
+      'Content-Type': 'application/x-www-form-urlencoded'
     }
 
-    options.credentials = 'include';
+    if (options.credentials === undefined) {
+      options.credentials = 'include'
+    }
+
+    if (isFormData(options.body)) {
+      delete options.headers
+    }
 
     if (data) {
       if (typeof data === 'string' || isFormData(data)) {
-        options.body = data;
+        options.body = data
       } else {
         try {
-          options.body = JSON.stringify(data);
+          options.body = JSON.stringify(data)
         } catch (e) {
-          options.body = data;
+          options.body = data
         }
       }
     }
-    return {
-      url, options,
-    };
+    return options
   }
 
-  _request(url, ...options) {
-    const request = this._creatRequest(url, ...options);
-    let chain = [() => fetch(request.url, request.options)];
-    let promise = Promise.resolve(request);
+  applyMiddleware = middlewares => {
+    this.middlewares = middlewares
+  }
+
+  request = (url, ...args) => {
+    const options = this.genOptions(...args)
+    let chain = [() => fetch(url, options)]
+    let promise = Promise.resolve(options)
+
     if (this.middlewares.request) {
-      chain.unshift(...[].concat(this.middlewares.request));
+      chain.unshift(...[].concat(this.middlewares.request))
     }
 
     if (this.middlewares.response) {
-      chain.push(...[].concat(this.middlewares.response));
+      chain.push(...[].concat(this.middlewares.response))
     }
 
     while (!!chain.length) {
-      promise = promise.then(chain.shift());
+      promise = promise.then(chain.shift())
     }
-    return promise;
-  }
 
-  applyMiddleware(middlewares) {
-    this.middlewares = middlewares;
-  }
-
-  fetch(url, options) {
-    return this._request(url, options);
+    return promise
   }
 
   get(url, data, options) {
-    if (data) {
-      url = url + '?' + querystring.stringify(data);
-    }
-    return this._request(url, options, 'GET');
+    url = buildUrl(url, data)
+    return this.request(url, options, 'GET')
   }
 
   post(url, data, options) {
-    return this._request(url, options, 'POST', querystring.stringify(data));
+    return this.request(url, options, 'POST', data)
   }
 
   patch(url, data, options) {
-    return this._request(url, options, 'PATCH', data);
+    return this.request(url, options, 'PATCH', data)
   }
 
   put(url, data, options) {
-    return this._request(url, options, 'PUT', querystring.stringify(data));
+    return this.request(url, options, 'PUT', data)
   }
 
   delete(url, options) {
-    return this._request(url, options, 'DELETE');
+    return this.request(url, options, 'DELETE')
   }
 
   head(url, options) {
-    return this._request(url, options, 'HEAD');
+    return this.request(url, options, 'HEAD')
   }
 }
 
-class FetchFactory {
-  constructor() {
-    this.instance = new Fetch();
-  }
+const fetchX = new Fetch()
 
-  applyMiddleware(middlewares) {
-    this.instance.applyMiddleware(middlewares);
-  }
+fetchX.create = config => new Fetch(config)
 
-  create(config) {
-    return new Fetch(config);
-  }
-
-  fetch(...args) {
-    return this.instance.fetch(...args);
-  }
-
-  get(...args) {
-    return this.instance.get(...args);
-  }
-
-  post(...args) {
-    return this.instance.post(...args);
-  }
-
-  patch(...args) {
-    return this.instance.patch(...args);
-  }
-
-  put(...args) {
-    return this.instance.put(...args);
-  }
-
-  delete(...args) {
-    return this.instance.delete(...args);
-  }
-
-  head(...args) {
-    return this.instance.head(...args);
-  }
-}
-
-module.exports = new FetchFactory();
+export default fetchX

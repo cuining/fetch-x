@@ -32,15 +32,15 @@ fetchX.post('/xxx', {
 > the default `credentials` option is `include`)  
 
 ```javascript
-fetchX.fetch(url[, options]
+fetchX.request(url[, options]
 
 fetchX.get(url[, data[, options]])
+
+fetchX.post(url[, data[, options]])
 
 fetchX.delete(url[, options])
 
 fetchX.head(url[, options])
-
-fetchX.post(url[, data[, options]])
 
 fetchX.put(url[, data[, options]])
 
