@@ -1,4 +1,3 @@
-
 const isFormData = o => toString.call(o) === '[object FormData]'
 
 const encode = (val) => {
@@ -36,17 +35,13 @@ class Fetch {
     this.middlewares = []
   }
 
-  genOptions = (options = {}, method, data) => {
-    options = { ...this.config, ...options }
+  genOptions (options = {}, method, data) {
+    options = Object.assign({}, this.config, options)
 
     const defaultMethod = !data && !options.body ? 'GET' : 'POST'
     options.method = method || options.method || defaultMethod
     options.headers = options.headers || {
       'Content-Type': 'application/x-www-form-urlencoded'
-    }
-
-    if (options.credentials === undefined) {
-      options.credentials = 'include'
     }
 
     if (isFormData(options.body)) {
@@ -71,7 +66,7 @@ class Fetch {
     this.middlewares = middlewares
   }
 
-  request = (url, ...args) => {
+  request (url, ...args) {
     const options = this.genOptions(...args)
     let chain = [() => fetch(url, options)]
     let promise = Promise.resolve(options)
@@ -91,28 +86,28 @@ class Fetch {
     return promise
   }
 
-  get(url, data, options) {
+  get = (url, data, options) => {
     url = buildUrl(url, data)
     return this.request(url, options, 'GET')
   }
 
-  post(url, data, options) {
+  post = (url, data, options) => {
     return this.request(url, options, 'POST', data)
   }
 
-  patch(url, data, options) {
+  patch = (url, data, options) => {
     return this.request(url, options, 'PATCH', data)
   }
 
-  put(url, data, options) {
+  put = (url, data, options) => {
     return this.request(url, options, 'PUT', data)
   }
 
-  delete(url, options) {
+  delete = (url, options) => {
     return this.request(url, options, 'DELETE')
   }
 
-  head(url, options) {
+  head = (url, options) => {
     return this.request(url, options, 'HEAD')
   }
 }

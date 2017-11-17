@@ -1,5 +1,5 @@
-const path = require('path');
-const webpack = require('webpack');
+const path = require('path')
+const webpack = require('webpack')
 
 module.exports = {
   entry: './index.js',
@@ -7,17 +7,17 @@ module.exports = {
     path: path.join(__dirname, 'dist'),
     filename: 'index.js',
     library: 'fetchX',
-    libraryTarget: 'commonjs'
+    libraryTarget: 'umd'
   },
   module: {
-    loaders: [{
-      test: /\.js$/,
-      exclude: /node_modules/,
-      loader: 'babel-loader'
-    }]
+    rules: [
+      {
+        test: /\.js$/,
+        exclude: /node_modules/,
+        loader: 'babel-loader'
+      }
+    ]
   },
-  plugins: [
-    new webpack.optimize.UglifyJsPlugin()
-  ],
+  plugins: [new webpack.optimize.UglifyJsPlugin()],
   devtool: 'source-map'
-};
+}
