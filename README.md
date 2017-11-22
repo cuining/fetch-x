@@ -29,10 +29,8 @@ fetchX.post('/xxx', {
 ```
 
 ## Methods
-> the default `credentials` option is `include`)  
 
 ```javascript
-fetchX.request(url[, options]
 
 fetchX.get(url[, data[, options]])
 
@@ -53,12 +51,12 @@ const myfetch = fetchX.create({
     'Authorization': 'Bearer ' + getAPIToken(),
     'X-My-Custom-Header': 'CustomHeader'
   }
-});
+})
 
 myfetch.get(url)
 .then(res => res.json())
 .then(json => console.log(json))
-.catch(error => console.error(error));
+.catch(error => console.error(error))
   ```
 
 ## Middleware
@@ -73,12 +71,12 @@ fetchX.applyMiddleware({
       // do something...
     } else {
       // do something...
-      return json;
+      return json
     }
   }],
   request: request => {
-    request.url = xxx + request.url;
-    return request;
+    request.url = xxx + request.url
+    return request
   }
 })
 ```
